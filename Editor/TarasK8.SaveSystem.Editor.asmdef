@@ -1,7 +1,9 @@
 {
     "name": "TarasK8.SaveSystem.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:f6eda312ff4328747886239f3154f04b"
+    ],
     "includePlatforms": [
         "Editor"
     ],
