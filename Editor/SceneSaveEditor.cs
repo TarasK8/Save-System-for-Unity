@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,6 +27,8 @@ namespace TarasK8.SaveSystem
 
         private SerializedProperty _onSave_event;
         private SerializedProperty _onLoad_event;
+
+        private Vector2 _scrollPosition = Vector2.zero;
 
         private void OnEnable()
         {
@@ -90,50 +93,69 @@ namespace TarasK8.SaveSystem
 
             serializedObject.ApplyModifiedProperties();
 
-            // TODO
-            /*
+            // File preview
+            
             EditorGUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("File Preview", EditorStyles.boldLabel);
-            if (GUILayout.Button("Load"))
+            if(_file != null && GUILayout.Button("Save Changes"))
             {
-                _file = new File(_sceneSave.GetPath(), true, _encryptionPassword_string.stringValue);
+                _file.Save();
+            }
+            if (GUILayout.Button(_file == null ? "Load" : "Refresh"))
+            {
+                _file = new SFile(_sceneSave.GetPath(), true, encryptionPassword: _useEncryption_bool.boolValue ? _encryptionPassword_string.stringValue : string.Empty);
             }
             EditorGUILayout.EndHorizontal();
 
             if(_file != null)
             {
-                var data = _file.GetAllRawData();
+                EditorGUILayout.Space(10f);
+                _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
+                var data = _file.GetAllRawData().ToList();
+
                 foreach (var item in data)
                 {
                     DrawFileValue(item);
                 }
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Button("Save");
-                GUILayout.Button("Delete");
-                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.EndScrollView();
             }
-            */
+            
         }
 
         private void DrawFileValue(KeyValuePair<string, object> item)
         {
-            var maxHeight = GUILayout.MaxHeight(30f);
+            var maxHeight = GUILayout.MaxHeight(20f);
 
             EditorGUILayout.BeginHorizontal(maxHeight);
-            EditorGUILayout.TextArea(item.Key, GUILayout.Width(80f));
-            object value = item.Value;
-            if (value is JToken)
+            EditorGUILayout.TextArea(item.Key, GUILayout.Width(70f));
+            JToken value = JToken.FromObject(item.Value);
+
+            switch (value.Type)
             {
-                var obj = ((JToken)value);
-                EditorGUILayout.TextArea(obj.ToString(), maxHeight);
-                EditorGUILayout.LabelField(obj.Type.ToString());
+                case JTokenType.Integer:
+                    _file.Write(item.Key, EditorGUILayout.IntField(value.Type.ToString(), value.ToObject<int>()));
+                    break;
+                case JTokenType.Float:
+                    _file.Write(item.Key, EditorGUILayout.FloatField(value.Type.ToString(), value.ToObject<float>()));
+                    break;
+                case JTokenType.String:
+                    _file.Write(item.Key, EditorGUILayout.TextField(value.Type.ToString(), value.ToObject<string>()));
+                    break;
+                case JTokenType.Boolean:
+                    _file.Write(item.Key, EditorGUILayout.Toggle(value.Type.ToString(), value.ToObject<bool>()));
+                    break;
+                default:
+                    EditorGUILayout.LabelField(value.ToString().Replace("\n", string.Empty));
+                    break;
             }
-            else
+
+            if (GUILayout.Button("Delete Key", GUILayout.Width(80f)))
             {
-                EditorGUILayout.TextArea(value.ToString());
+                _file.DeleteKey(item.Key);
             }
-            EditorGUILayout.LabelField(value.GetType().Name);
             EditorGUILayout.EndHorizontal();
         }
 
@@ -150,6 +172,12 @@ namespace TarasK8.SaveSystem
                 Debug.LogWarning($"Path {itemPath} not exists");
             }
 #endif
+        }
+
+        public enum Type
+        {
+            Vector3 = 0,
+            ObjectReference = 1,
         }
     }
 }
