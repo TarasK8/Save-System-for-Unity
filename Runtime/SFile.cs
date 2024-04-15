@@ -20,9 +20,9 @@ namespace TarasK8.SaveSystem
             _encryptionPassword = encryptionPassword;
             _encryption = string.IsNullOrEmpty(encryptionPassword) == false;
 
-            if(System.IO.File.Exists(path))
+            if(File.Exists(path))
             {
-                string json = System.IO.File.ReadAllText(path);
+                string json = File.ReadAllText(path);
                 if(_encryption == true)
                     json = EncryptDecrypt(json, _encryptionPassword);
                 LoadFromJson(json);
