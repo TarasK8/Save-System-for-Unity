@@ -8,14 +8,14 @@ using UnityEngine;
 
 namespace TarasK8.SaveSystem
 {
-    public class File
+    public class SFile
     {
         private Dictionary<string, object> _data;
         private string _path;
         private string _encryptionPassword = null;
         private bool _encryption;
 
-        public File(string path, bool loadIfExists = true, string encryptionPassword = null)
+        public SFile(string path, bool loadIfExists = true, string encryptionPassword = null)
         {
             _path = path;
             _encryptionPassword = encryptionPassword;

@@ -23,10 +23,10 @@ namespace TarasK8.SaveSystem
         [SerializeField] private float _savePeriod = 30f;
 
         // [Header("Events")]
-        [SerializeField] public UnityEvent<File> OnSave;
-        [SerializeField] public UnityEvent<File> OnLoad;
+        [SerializeField] public UnityEvent<SFile> OnSave;
+        [SerializeField] public UnityEvent<SFile> OnLoad;
 
-        public File File { get; private set; }
+        public SFile File { get; private set; }
 
         private IEnumerable<ISaveable> _seveables;
         private Coroutine _autosavingRoutine;
@@ -38,7 +38,7 @@ namespace TarasK8.SaveSystem
 
         public void Initialize()
         {
-            File = new File(GetPath(), loadIfExists: true, encryptionPassword: _useEncryption ? _encryptionPassword : string.Empty);
+            File = new SFile(GetPath(), loadIfExists: true, encryptionPassword: _useEncryption ? _encryptionPassword : string.Empty);
             _seveables = GetObjectsForSave();
             Load();
             if (_autoSaving)

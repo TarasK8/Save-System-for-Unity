@@ -11,7 +11,7 @@ namespace TarasK8.SaveSystem
     public class SceneSaveEditor : Editor
     {
         private SaveSystemObject _sceneSave;
-        private File _file;
+        private SFile _file;
 
         private SerializedProperty _fileName_string;
         private SerializedProperty _path_enum;

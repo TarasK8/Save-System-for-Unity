@@ -2,7 +2,7 @@ namespace TarasK8.SaveSystem
 {
     public interface ISaveable
     {
-        public void OnSave(File file) { }
-        public void OnLoad(File file) { }
+        public void OnSave(SFile file) { }
+        public void OnLoad(SFile file) { }
     }
 }
