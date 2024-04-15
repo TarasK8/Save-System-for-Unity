@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -147,19 +146,8 @@ namespace TarasK8.SaveSystem
 
         private T ToObject<T>(object data)
         {
-            if (data is T)
-            {
-                return (T)data;
-            }
-            else if (data is JToken)
-            {
-                var obj = ((JToken)data).ToObject<T>();
-                return obj;
-            }
-            else
-            {
-                throw new JsonException();
-            }
+            var obj = JToken.FromObject(data);
+            return obj.ToObject<T>();
         }
 
     }
