@@ -25,31 +25,31 @@
 1. Create Empty GameObject and add `SaveSystemObject` component.
 2. Extend the MonoBehaviour class for saving with the `ISaveable` interface and implement it
    ```csharp
-   public void OnSave(File file) { }
+   public void OnSave(SFile file) { }
 
-   public void OnLoad(File file) { }
+   public void OnLoad(SFile file) { }
    ```
    > If necessary, you can implement only one of these methods
 3. In the implemented methods, write the logic for saving and loading, for example:
    ```csharp
    private int _valueForSave;
    
-   public void OnSave(File file)
+   public void OnSave(SFile file)
    {
        file.Write("Key", _valueForSave);
    }
 
-   public void OnLoad(File file)
+   public void OnLoad(SFile file)
    {
        _valueForSave = file.Read<int>("Key");
    }
    ```
 4. After that, depending on the `SaveSystemObject` object settings, it will save all `ISaveable` objects. Or you can save the data manually, using the `SceneSave.Save()` method.
 ### Custom save system
-- You can also make a custom save system by directly using the File class, for example:
+- You can also make a custom save system by directly using the SFile class, for example:
   ```csharp
   string path = System.IO.Path.Combine(Application.persistentDataPath, "Saves/save.json");
-  File file = new File(path);
+  SFile file = new SFile(path);
   int valueToSave = 1234;
   file.Write("Key", valueToSave);
   file.Save();
