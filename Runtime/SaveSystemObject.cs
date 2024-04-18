@@ -38,7 +38,7 @@ namespace TarasK8.SaveSystem
 
         public void Initialize()
         {
-            File = new SFile(GetPath(), loadIfExists: true, encryptionPassword: _useEncryption ? _encryptionPassword : string.Empty);
+            File = new SFile();
             _seveables = GetObjectsForSave();
             Load();
             if (_autoSaving)
@@ -56,12 +56,13 @@ namespace TarasK8.SaveSystem
                 saveObject.OnSave(File);
             }
             OnSave?.Invoke(File);
-            File.Save();
+            File.Save(GetPath(), GetPassword());
         }
 
         public void Load()
         {
             if (_collectSaveablesEverySave) _seveables = GetObjectsForSave();
+            File.Load(GetPath(), GetPassword());
             foreach (var saveObject in _seveables)
             {
                 saveObject.OnLoad(File);
@@ -113,6 +114,11 @@ namespace TarasK8.SaveSystem
                 Save();
                 yield return wait;
             }
+        }
+
+        public string GetPassword()
+        {
+            return _useEncryption ? _encryptionPassword : string.Empty;
         }
 
         public enum PathType

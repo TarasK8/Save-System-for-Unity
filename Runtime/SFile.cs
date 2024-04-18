@@ -10,27 +10,10 @@ namespace TarasK8.SaveSystem
     public class SFile
     {
         private Dictionary<string, object> _data;
-        private string _path;
-        private string _encryptionPassword = null;
-        private bool _encryption;
 
-        public SFile(string path, bool loadIfExists = true, string encryptionPassword = null)
+        public SFile()
         {
-            _path = path;
-            _encryptionPassword = encryptionPassword;
-            _encryption = string.IsNullOrEmpty(encryptionPassword) == false;
-
-            if(File.Exists(path))
-            {
-                string json = File.ReadAllText(path);
-                if(_encryption == true)
-                    json = EncryptDecrypt(json, _encryptionPassword);
-                LoadFromJson(json);
-            }
-            else
-            {
-                _data = new Dictionary<string, object>();
-            }
+            _data = new Dictionary<string, object>();
         }
 
         public void Write(string key, object value)
@@ -81,20 +64,30 @@ namespace TarasK8.SaveSystem
             return _data.Remove(key);
         }
 
-        public void Save()
+        public void Save(string path, string encriptionPassword = null)
         {
             string json = GetJson();
-            if (_encryption)
+            if (string.IsNullOrEmpty(encriptionPassword) == false)
             {
-                json = EncryptDecrypt(json, _encryptionPassword);
+                json = EncryptDecrypt(json, encriptionPassword);
             }
-            string directoryPath = Path.GetDirectoryName(_path);
+            string directoryPath = Path.GetDirectoryName(path);
 
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            System.IO.File.WriteAllText(_path, json);
+            File.WriteAllText(path, json);
+        }
+
+        public void Load(string path, string encriptionPassword = null)
+        {
+            string json = File.ReadAllText(path);
+            if (string.IsNullOrEmpty(encriptionPassword) == false)
+            {
+                json = EncryptDecrypt(json, encriptionPassword);
+            }
+            LoadFromJson(json);
         }
 
         private void LoadFromJson(string json)

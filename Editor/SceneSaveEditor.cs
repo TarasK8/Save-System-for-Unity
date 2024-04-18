@@ -100,11 +100,12 @@ namespace TarasK8.SaveSystem
             EditorGUILayout.LabelField("File Preview", EditorStyles.boldLabel);
             if(_file != null && GUILayout.Button("Save Changes"))
             {
-                _file.Save();
+                _file.Save(_sceneSave.GetPath(), _sceneSave.GetPassword());
             }
             if (GUILayout.Button(_file == null ? "Load" : "Refresh"))
             {
-                _file = new SFile(_sceneSave.GetPath(), true, encryptionPassword: _useEncryption_bool.boolValue ? _encryptionPassword_string.stringValue : string.Empty);
+                _file = new SFile();
+                _file.Load(_sceneSave.GetPath(), _sceneSave.GetPassword());
             }
             EditorGUILayout.EndHorizontal();
 
