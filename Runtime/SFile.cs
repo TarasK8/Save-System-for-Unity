@@ -114,14 +114,6 @@ namespace TarasK8.SaveSystem
             return JsonConvert.SerializeObject(_data, Formatting.Indented);
         }
 
-        public void PrintTypes()
-        {
-            foreach (var type in _data.Values)
-            {
-                Debug.Log(type.GetType().Name);
-            }
-        }
-
         public Dictionary<string, object> GetAllRawData()
         {
             return _data;
