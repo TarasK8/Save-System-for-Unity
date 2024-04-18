@@ -64,12 +64,12 @@ namespace TarasK8.SaveSystem
             return _data.Remove(key);
         }
 
-        public void Save(string path, string encriptionPassword = null)
+        public void Save(string path, string encryptionPassword = null)
         {
             string json = GetJson();
-            if (string.IsNullOrEmpty(encriptionPassword) == false)
+            if (string.IsNullOrEmpty(encryptionPassword) == false)
             {
-                json = EncryptDecrypt(json, encriptionPassword);
+                json = EncryptDecrypt(json, encryptionPassword);
             }
             string directoryPath = Path.GetDirectoryName(path);
 
@@ -80,12 +80,12 @@ namespace TarasK8.SaveSystem
             File.WriteAllText(path, json);
         }
 
-        public void Load(string path, string encriptionPassword = null)
+        public void Load(string path, string encryptionPassword = null)
         {
             string json = File.ReadAllText(path);
-            if (string.IsNullOrEmpty(encriptionPassword) == false)
+            if (string.IsNullOrEmpty(encryptionPassword) == false)
             {
-                json = EncryptDecrypt(json, encriptionPassword);
+                json = EncryptDecrypt(json, encryptionPassword);
             }
             LoadFromJson(json);
         }
