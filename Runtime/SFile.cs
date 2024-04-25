@@ -90,7 +90,7 @@ namespace TarasK8.SaveSystem
             LoadFromJson(json);
         }
 
-        private void LoadFromJson(string json)
+        public void LoadFromJson(string json)
         {
             bool success = true;
             var settings = new JsonSerializerSettings
