@@ -2,6 +2,9 @@
  Easy save system for Unity, based on [Newtonsoft Json Package](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@3.2/manual/index.html) and [Newtonsoft.Json-for-Unity.Converters](https://github.com/applejag/Newtonsoft.Json-for-Unity.Converters) for serialization.
  ## Fetures
 
+## Warning!!!
+The package is currently in an early stage of development, so some methods and concepts may change over time. Use at your own risk
+
 ## Installation
 1. Open the `manifest.json` in your project by path `[Project Folder]\Packages\manifest.json` and add Scoped Registry:
    ```json
