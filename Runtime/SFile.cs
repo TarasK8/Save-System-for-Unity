@@ -36,7 +36,20 @@ namespace TarasK8.SaveSystem
             }
             else
             {
-                throw new System.ArgumentOutOfRangeException(nameof(key));
+                Debug.LogWarning(@$"No value found for '{key}'.");
+                return default;
+            }
+        }
+
+        public T Read<T>(string key, T defaultValue)
+        {
+            if (_data.TryGetValue(key, out var data))
+            {
+                return ToObject<T>(data);
+            }
+            else
+            {
+                return defaultValue;
             }
         }
 

@@ -61,7 +61,7 @@ namespace TarasK8.SaveSystem
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.PropertyField(_fileName_string);
             EditorGUILayout.PropertyField(_path_enum);
-            if(_path_enum.enumValueIndex == 2)
+            if (_path_enum.enumValueIndex == 2)
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(_customPath_string);
@@ -75,13 +75,13 @@ namespace TarasK8.SaveSystem
             EditorGUILayout.PropertyField(_collectSaveablesEverySave_bool);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(_useEncryption_bool);
-            if(_useEncryption_bool.boolValue)
+            if (_useEncryption_bool.boolValue)
                 EditorGUILayout.PropertyField(_encryptionPassword_string, new GUIContent(string.Empty));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(_autoSaving_bool);
-            if(_autoSaving_bool.boolValue)
+            if (_autoSaving_bool.boolValue)
                 EditorGUILayout.PropertyField(_savePerion_int, new GUIContent("Period (seconds)"));
             EditorGUILayout.EndHorizontal();
 
@@ -94,11 +94,11 @@ namespace TarasK8.SaveSystem
             serializedObject.ApplyModifiedProperties();
 
             // File preview
-            
+
             EditorGUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("File Preview", EditorStyles.boldLabel);
-            if(_file != null && GUILayout.Button("Save Changes"))
+            if (_file != null && GUILayout.Button("Save Changes"))
             {
                 _file.Save(_sceneSave.GetPath(), _sceneSave.GetPassword());
             }
@@ -109,7 +109,7 @@ namespace TarasK8.SaveSystem
             }
             EditorGUILayout.EndHorizontal();
 
-            if(_file != null)
+            if (_file != null)
             {
                 EditorGUILayout.Space(10f);
                 _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
@@ -123,7 +123,7 @@ namespace TarasK8.SaveSystem
 
                 EditorGUILayout.EndScrollView();
             }
-            
+
         }
 
         private void DrawFileValue(KeyValuePair<string, object> item)
