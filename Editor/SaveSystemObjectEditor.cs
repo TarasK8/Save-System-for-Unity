@@ -1,18 +1,19 @@
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using TarasK8.SaveSystem;
+using TarasK8.SaveSystemEditor.JEditor;
 using UnityEditor;
 using UnityEngine;
 
-namespace TarasK8.SaveSystem
+namespace TarasK8.SaveSystemEditor
 {
     [CustomEditor(typeof(SaveSystemObject))]
     [CanEditMultipleObjects]
-    public class SceneSaveEditor : Editor
+    public class SaveSystemObjectEditor : Editor
     {
         private SaveSystemObject _sceneSave;
         private SFile _file;
+        private JsonEditor _fileEditor;
 
         private SerializedProperty _fileName_string;
         private SerializedProperty _path_enum;
@@ -75,13 +76,13 @@ namespace TarasK8.SaveSystem
             EditorGUILayout.PropertyField(_collectSaveablesEverySave_bool);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(_useEncryption_bool);
-            if (_useEncryption_bool.boolValue)
+            if(_useEncryption_bool.boolValue)
                 EditorGUILayout.PropertyField(_encryptionPassword_string, new GUIContent(string.Empty));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(_autoSaving_bool);
-            if (_autoSaving_bool.boolValue)
+            if(_autoSaving_bool.boolValue)
                 EditorGUILayout.PropertyField(_savePerion_int, new GUIContent("Period (seconds)"));
             EditorGUILayout.EndHorizontal();
 
@@ -94,70 +95,30 @@ namespace TarasK8.SaveSystem
             serializedObject.ApplyModifiedProperties();
 
             // File preview
-
+            
             EditorGUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("File Preview", EditorStyles.boldLabel);
-            if (_file != null && GUILayout.Button("Save Changes"))
+            if(_file != null && GUILayout.Button("Save Changes"))
             {
+                _file.LoadFromJson(_fileEditor.GetJson());
                 _file.Save(_sceneSave.GetPath(), _sceneSave.GetPassword());
             }
             if (GUILayout.Button(_file == null ? "Load" : "Refresh"))
             {
                 _file = new SFile();
                 _file.Load(_sceneSave.GetPath(), _sceneSave.GetPassword());
+
+                _fileEditor = new JsonEditor(JToken.Parse(_file.GetJson()), this);
             }
             EditorGUILayout.EndHorizontal();
 
-            if (_file != null)
+            if(_file != null)
             {
                 EditorGUILayout.Space(10f);
-                _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
-
-                var data = _file.GetAllRawData().ToList();
-
-                foreach (var item in data)
-                {
-                    DrawFileValue(item);
-                }
-
-                EditorGUILayout.EndScrollView();
+                _fileEditor.DrawEditor();
             }
-
-        }
-
-        private void DrawFileValue(KeyValuePair<string, object> item)
-        {
-            var maxHeight = GUILayout.MaxHeight(20f);
-
-            EditorGUILayout.BeginHorizontal(maxHeight);
-            EditorGUILayout.TextArea(item.Key, GUILayout.Width(70f));
-            JToken value = JToken.FromObject(item.Value);
-
-            switch (value.Type)
-            {
-                case JTokenType.Integer:
-                    _file.Write(item.Key, EditorGUILayout.IntField(value.Type.ToString(), value.ToObject<int>()));
-                    break;
-                case JTokenType.Float:
-                    _file.Write(item.Key, EditorGUILayout.FloatField(value.Type.ToString(), value.ToObject<float>()));
-                    break;
-                case JTokenType.String:
-                    _file.Write(item.Key, EditorGUILayout.TextField(value.Type.ToString(), value.ToObject<string>()));
-                    break;
-                case JTokenType.Boolean:
-                    _file.Write(item.Key, EditorGUILayout.Toggle(value.Type.ToString(), value.ToObject<bool>()));
-                    break;
-                default:
-                    EditorGUILayout.LabelField(value.ToString().Replace("\n", string.Empty));
-                    break;
-            }
-
-            if (GUILayout.Button("Delete Key", GUILayout.Width(80f)))
-            {
-                _file.DeleteKey(item.Key);
-            }
-            EditorGUILayout.EndHorizontal();
+            
         }
 
         private void ShowExplorer(string itemPath)
@@ -173,12 +134,6 @@ namespace TarasK8.SaveSystem
                 Debug.LogWarning($"Path {itemPath} not exists");
             }
 #endif
-        }
-
-        public enum Type
-        {
-            Vector3 = 0,
-            ObjectReference = 1,
         }
     }
 }
