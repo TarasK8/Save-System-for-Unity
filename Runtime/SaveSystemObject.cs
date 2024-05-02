@@ -21,6 +21,10 @@ namespace TarasK8.SaveSystem
         [SerializeField] private string _encryptionPassword = "password";
         [SerializeField] private bool _autoSaving = false;
         [SerializeField] private float _savePeriod = 30f;
+        [SerializeField] private bool _enableDefaultFile = false;
+        [SerializeField] private DefaultFileType _defaultFileType;
+        [SerializeField] private Object _defaultFileObject = null;
+        [SerializeField] private FileObject _defaultFile = null;
 
         // [Header("Events")]
         [SerializeField] public UnityEvent<SFile> OnSave;
@@ -126,6 +130,12 @@ namespace TarasK8.SaveSystem
             PersistentDataPath = 1,
             DataPath = 2,
             CustomPath = 3
+        }
+
+        public enum DefaultFileType
+        {
+            File = 0,
+            Object = 1,
         }
     }
 }

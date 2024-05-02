@@ -4,6 +4,7 @@ using TarasK8.SaveSystem;
 using TarasK8.SaveSystemEditor.JEditor;
 using UnityEditor;
 using UnityEngine;
+using static TarasK8.SaveSystem.SaveSystemObject;
 
 namespace TarasK8.SaveSystemEditor
 {
@@ -25,6 +26,10 @@ namespace TarasK8.SaveSystemEditor
         private SerializedProperty _encryptionPassword_string;
         private SerializedProperty _autoSaving_bool;
         private SerializedProperty _savePerion_int;
+        private SerializedProperty _enableDefaultFile_bool;
+        private SerializedProperty _defaultFileType_enum;
+        private SerializedProperty _defaultFileObject_obj;
+        private SerializedProperty _defaultFile_fileObj;
 
         private SerializedProperty _onSave_event;
         private SerializedProperty _onLoad_event;
@@ -44,6 +49,11 @@ namespace TarasK8.SaveSystemEditor
             _encryptionPassword_string = serializedObject.FindProperty("_encryptionPassword");
             _autoSaving_bool = serializedObject.FindProperty("_autoSaving");
             _savePerion_int = serializedObject.FindProperty("_savePeriod");
+
+            _enableDefaultFile_bool = serializedObject.FindProperty("_enableDefaultFile");
+            _defaultFileType_enum = serializedObject.FindProperty("_defaultFileType");
+            _defaultFileObject_obj = serializedObject.FindProperty("_defaultFileObject");
+            _defaultFile_fileObj = serializedObject.FindProperty("_defaultFile");
 
             _onSave_event = serializedObject.FindProperty("OnSave");
             _onLoad_event = serializedObject.FindProperty("OnLoad");
@@ -84,6 +94,25 @@ namespace TarasK8.SaveSystemEditor
             EditorGUILayout.PropertyField(_autoSaving_bool);
             if(_autoSaving_bool.boolValue)
                 EditorGUILayout.PropertyField(_savePerion_int, new GUIContent("Period (seconds)"));
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(_enableDefaultFile_bool, new GUIContent("Default File"));
+            if (_enableDefaultFile_bool.boolValue)
+            {
+                EditorGUILayout.BeginHorizontal();
+                switch ((DefaultFileType)_defaultFileType_enum.enumValueIndex)
+                {
+                    case DefaultFileType.File:
+                        EditorGUILayout.PropertyField(_defaultFile_fileObj, new GUIContent(string.Empty));
+                        break;
+                    case DefaultFileType.Object:
+                        EditorGUILayout.PropertyField(_defaultFileObject_obj, new GUIContent(string.Empty));
+                        break;
+                }
+                EditorGUILayout.PropertyField(_defaultFileType_enum, new GUIContent(string.Empty), GUILayout.Width(60f));
+                EditorGUILayout.EndHorizontal();
+            }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space(10f);
