@@ -1,6 +1,13 @@
 # Save System
  Easy save system for Unity, based on [Newtonsoft Json Package](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@3.2/manual/index.html) and [Newtonsoft.Json-for-Unity.Converters](https://github.com/applejag/Newtonsoft.Json-for-Unity.Converters) for serialization.
  ## Fetures
+ - Сan save almost any type (List, Class, Struct, most Unity types, etc)
+ - Can save asset references
+ - Сan add default data (if the file does not contain a value for the key, the data is taken from the default data)
+ - Simple data encryption
+ - Easy to use
+ - Json Constructor in Unity Editor (edit the save file directly in the editor)
+ - Flexible (use an existing component, or create your own save system based on the SFile class)
 
 ## Warning!!!
 The package is currently in an early stage of development, so some methods and concepts may change over time. Use at your own risk
