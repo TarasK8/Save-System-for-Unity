@@ -1,6 +1,6 @@
 {
   "name": "com.tarask8.save-system",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "displayName": "Save System",
   "description": "This is a simple save system for unity.",
   "unity": "2022.3",

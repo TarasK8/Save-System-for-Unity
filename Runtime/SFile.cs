@@ -95,7 +95,16 @@ namespace TarasK8.SaveSystem
 
         public void Load(string path, string encryptionPassword = null)
         {
-            string json = File.ReadAllText(path);
+            string json = null;
+            if(File.Exists(path))
+            {
+                json = File.ReadAllText(path);
+            }
+            if (string.IsNullOrEmpty(json))
+            {
+                _data = new Dictionary<string, object>();
+                return;
+            }
             if (string.IsNullOrEmpty(encryptionPassword) == false)
             {
                 json = EncryptDecrypt(json, encryptionPassword);
@@ -144,6 +153,7 @@ namespace TarasK8.SaveSystem
 
         private T ToObject<T>(object data)
         {
+            if(data == null) return default;
             var obj = JToken.FromObject(data);
             return obj.ToObject<T>();
         }
