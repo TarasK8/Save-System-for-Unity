@@ -97,7 +97,7 @@ namespace TarasK8.SaveSystemEditor
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PropertyField(_enableDefaultFile_bool, new GUIContent("Default File"));
+            EditorGUILayout.PropertyField(_enableDefaultFile_bool, new GUIContent("Default Data"));
             if (_enableDefaultFile_bool.boolValue)
             {
                 EditorGUILayout.BeginHorizontal();
