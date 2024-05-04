@@ -113,7 +113,7 @@ namespace TarasK8.SaveSystemEditor
             }
             EditorGUILayout.EndHorizontal();
 
-            if(_file != null)
+            if (_file != null && _fileEditor != null)
             {
                 EditorGUILayout.Space(10f);
                 _fileEditor.DrawEditor();
