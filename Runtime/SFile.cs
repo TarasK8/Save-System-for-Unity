@@ -131,6 +131,18 @@ namespace TarasK8.SaveSystem
                 _data = data;
         }
 
+        public void MergeFromJson(string json)
+        {
+            JObject o1 = JObject.FromObject(_data);
+            JObject o2 = JObject.Parse(json);
+            o2.Merge(o1, new JsonMergeSettings
+            {
+                // union array values together to avoid duplicates
+                MergeArrayHandling = MergeArrayHandling.Union
+            });
+            LoadFromJson(o2.ToString());
+        }
+
         public string GetJson()
         {
             return JsonConvert.SerializeObject(_data, Formatting.Indented);

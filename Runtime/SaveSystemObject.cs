@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +22,10 @@ namespace TarasK8.SaveSystem
         [SerializeField] private string _encryptionPassword = "password";
         [SerializeField] private bool _autoSaving = false;
         [SerializeField] private float _savePeriod = 30f;
+        [SerializeField] private bool _enableDefaultFile = false;
+        [SerializeField] private DefaultFileType _defaultFileType;
+        [SerializeField] private Object _defaultFileObject = null;
+        [SerializeField] private FileObject _defaultFile = null;
 
         // [Header("Events")]
         [SerializeField] public UnityEvent<SFile> OnSave;
@@ -51,9 +56,12 @@ namespace TarasK8.SaveSystem
         public void Save()
         {
             if(_collectSaveablesEverySave) _seveables = GetObjectsForSave();
-            foreach (var saveObject in _seveables)
+            if (_seveables != null)
             {
-                saveObject.OnSave(File);
+                foreach (var saveObject in _seveables)
+                {
+                    //saveObject.OnSave(File);
+                }
             }
             OnSave?.Invoke(File);
             File.Save(GetPath(), GetPassword());
@@ -62,11 +70,19 @@ namespace TarasK8.SaveSystem
         public void Load()
         {
             if (_collectSaveablesEverySave) _seveables = GetObjectsForSave();
+
             File.Load(GetPath(), GetPassword());
+
+            if (_enableDefaultFile)
+            {
+                File.MergeFromJson(GetDefaultDataJson());
+            }
+
             foreach (var saveObject in _seveables)
             {
                 saveObject.OnLoad(File);
             }
+
             OnLoad?.Invoke(File);
         }
 
@@ -74,6 +90,7 @@ namespace TarasK8.SaveSystem
         {
             _autoSaving = true;
             _savePeriod = period;
+            if (period < 1f) return;
             _autosavingRoutine = StartCoroutine(AutosavingRoutine(period));
         }
 
@@ -121,11 +138,29 @@ namespace TarasK8.SaveSystem
             return _useEncryption ? _encryptionPassword : string.Empty;
         }
 
+        private string GetDefaultDataJson()
+        {
+            if(_defaultFileType == DefaultFileType.File)
+            {
+                return _defaultFile.GetJson();
+            }
+            else
+            {
+                return JsonConvert.SerializeObject(_defaultFileObject);
+            }
+        }
+
         public enum PathType
         {
             PersistentDataPath = 1,
             DataPath = 2,
             CustomPath = 3
+        }
+
+        public enum DefaultFileType
+        {
+            File = 0,
+            Object = 1,
         }
     }
 }
