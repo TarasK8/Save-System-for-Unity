@@ -22,7 +22,7 @@ namespace TarasK8.SaveSystemEditor
             GetWindow<AssetsContainerEditor>("Saveable References").Show();
         }
 
-        [MenuItem("Assets/Add to Saveable References")]
+        [MenuItem("Assets/Make Saveable")]
         public static void AddToContainer()
         {
             AssetsContainer container = GetOrCreateContainer();

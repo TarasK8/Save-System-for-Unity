@@ -60,7 +60,7 @@ namespace TarasK8.SaveSystem
             {
                 foreach (var saveObject in _seveables)
                 {
-                    //saveObject.OnSave(File);
+                    saveObject.OnSave(File);
                 }
             }
             OnSave?.Invoke(File);

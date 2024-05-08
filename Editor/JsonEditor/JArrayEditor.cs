@@ -9,7 +9,7 @@ namespace TarasK8.SaveSystemEditor.JEditor
     public class JArrayEditor
     {
         private JArray _array;
-        private Dictionary<JToken, JTokenEditor> _childTokens;
+        private Dictionary<JToken, JArrayElementEditor> _childTokens;
         private Editor _editor;
         private AddData _addData;
         private int _displayElements = 15;
@@ -19,7 +19,7 @@ namespace TarasK8.SaveSystemEditor.JEditor
         {
             _array = array;
             _addData = new AddData();
-            _childTokens = new Dictionary<JToken, JTokenEditor>();
+            _childTokens = new();
             _editor = editor;
         }
 
@@ -55,12 +55,13 @@ namespace TarasK8.SaveSystemEditor.JEditor
                 int endIndex = offset + Mathf.Min(arrList.Count - offset, _displayElements);
                 for (int i = offset; i < endIndex; i++)
                 {
-                    GetTokenEditor(arrList[i]).Draw($"Element {i}", out var changedValue, addMode);
+                    GetArrayElementEditor(arrList[i]).Draw($"Element {i}", out var changedValue, addMode);
                     if (changedValue != null)
                     {
                         arrList[i].Replace(changedValue);
                     }
                 }
+                if (_array.Count == 0) return;
                 if (addMode)
                     DrawAddElementButton();
             }
@@ -170,7 +171,7 @@ namespace TarasK8.SaveSystemEditor.JEditor
             EditorGUILayout.EndHorizontal();
         }
 
-        private JTokenEditor GetTokenEditor(JToken token)
+        private JArrayElementEditor GetArrayElementEditor(JToken token)
         {
             if (_childTokens.TryGetValue(token, out var propertyEditor))
             {
@@ -178,7 +179,7 @@ namespace TarasK8.SaveSystemEditor.JEditor
             }
             else
             {
-                var newProperty = new JTokenEditor(token, _editor);
+                var newProperty = new JArrayElementEditor(token, _editor);
                 _childTokens.Add(token, newProperty);
                 return newProperty;
             }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace TarasK8.SaveSystem
 {
-    [CreateAssetMenu(fileName ="New File", menuName = "Save System/File")]
+    [CreateAssetMenu(fileName ="New File Object", menuName = "Save System/File Object")]
     public class FileObject : ScriptableObject
     {
         [SerializeField] private string _json;

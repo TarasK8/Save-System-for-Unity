@@ -30,6 +30,7 @@ namespace TarasK8.SaveSystemEditor
         {
             _json_string.stringValue = _fileEditor.GetJson();
             serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(this);
         }
     }
 }
