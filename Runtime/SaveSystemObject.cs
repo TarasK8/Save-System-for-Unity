@@ -120,7 +120,7 @@ namespace TarasK8.SaveSystem
 
         private IEnumerable<ISaveable> GetObjectsForSave()
         {
-            return FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>();
+            return FindObjectsOfType<MonoBehaviour>(true).OfType<ISaveable>();
         }
 
         private IEnumerator AutosavingRoutine(float period)
