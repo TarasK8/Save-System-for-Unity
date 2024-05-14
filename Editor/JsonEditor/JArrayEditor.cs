@@ -111,53 +111,6 @@ namespace TarasK8.SaveSystemEditor.JEditor
         {
             EditorGUILayout.BeginHorizontal("button");
 
-            /*
-            switch (_addData.Type)
-            {
-                case SupportType.Integer:
-                    try { _addData.Value = EditorGUILayout.IntField(Convert.ToInt32(_addData.Value)); }
-                    catch { _addData.Value = 0; }
-                    break;
-                case SupportType.Float:
-                    try { _addData.Value = EditorGUILayout.FloatField(Convert.ToSingle(_addData.Value)); }
-                    catch { _addData.Value = 0f; }
-                    break;
-                case SupportType.String:
-                    try { _addData.Value = EditorGUILayout.TextField(Convert.ToString(_addData.Value)); }
-                    catch { _addData.Value = string.Empty; }
-                    break;
-                case SupportType.Boolean:
-                    try { _addData.Value = EditorGUILayout.Toggle(Convert.ToBoolean(_addData.Value)); }
-                    catch { _addData.Value = false; }
-                    break;
-                case SupportType.Object:
-                    EditorGUILayout.TextField("Structure object");
-                    //data.Value = EditorGUILayout.ObjectField(((Object)data.Value));
-                    break;
-                case SupportType.Array:
-                    _addData.Value = new int[0];
-                    EditorGUILayout.TextField("Structure object");
-                    break;
-                default:
-                    JLayout.Unsupported(_addData.Type.ToString());
-                    break;
-            }
-            */
-
-            /*
-            UnityAction ifObjectAction = () =>
-            {
-                _addData.Value = new JObject();
-                EditorGUILayout.TextField("Structure object");
-            };
-            UnityAction ifArrayAction = () =>
-            {
-                _addData.Value = new int[0];
-                EditorGUILayout.TextField("Structure object");
-            };
-            _addData.Value = JLayout.PropertyByType(_addData.Value, JLayout.EnumConvert(_addData.Type), ifObject: ifObjectAction, ifArray: ifArrayAction) ?? _addData.Value;
-            */
-
             _addData.Value = JLayout.PropertyForAdd(_addData.Value, _addData.Type);
 
 
@@ -179,7 +132,7 @@ namespace TarasK8.SaveSystemEditor.JEditor
             }
             else
             {
-                var newProperty = new JArrayElementEditor(token, _editor);
+                var newProperty = new JArrayElementEditor(token, _editor, _childTokens);
                 _childTokens.Add(token, newProperty);
                 return newProperty;
             }
